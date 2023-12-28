@@ -1,0 +1,4 @@
+-r testing.txt
+
+django-extensions==3.2.3
+django-debug-toolbar==4.2.0
