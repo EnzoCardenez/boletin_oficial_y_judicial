@@ -2,7 +2,7 @@ import sys
 
 import environ
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 ROOT_DIR = environ.Path(__file__) - 3
@@ -52,7 +52,7 @@ THIRD_PARTY_APPS = (
 PROJECT_APPS = (
     'core',
     'administrativo',
-    'organismos',
+    'organismo',
     'persona',
     'publicacion',
     'usuario',
@@ -73,6 +73,8 @@ MIDDLEWARE = (
 )
 
 ROOT_URLCONF = 'project.urls'
+
+AUTH_USER_MODEL = 'usuario.Usuario'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'project.wsgi.application'
