@@ -6,7 +6,7 @@ from django.db import models
 class Organismo(models.Model):
 
     nombre = models.CharField(max_length=350, blank=False, null=False)
-    cuit = models.PositiveIntegerField(blank=False, null=True)
+    cuit = models.PositiveIntegerField(blank=False, null=False)
     descripcion = models.TextField(max_length=600, blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True, editable=False)
 

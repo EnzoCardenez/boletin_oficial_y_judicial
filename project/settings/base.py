@@ -47,6 +47,8 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'django_filters',
     'corsheaders',
+    'django_recaptcha',
+    'oauth2_provider',
 )
 
 PROJECT_APPS = (
@@ -60,6 +62,7 @@ PROJECT_APPS = (
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
+
 MIDDLEWARE = (
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -69,6 +72,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
 
 )
 
@@ -138,13 +142,45 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 50,
+    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_json_api.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework_json_api.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_json_api.filters.QueryParameterValidationFilter',
+        'rest_framework_json_api.filters.OrderingFilter',
+        'rest_framework_json_api.django_filters.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ),
+    'SEARCH_PARAM': 'filter[search]',
+    'TEST_REQUEST_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
+}
+
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    'oauth2_provider.backends.OAuth2Backend',
 )
 
 
-ACTIVAR_HERRAMIENTAS_DEBBUGING = env.bool('ACTIVAR_HERRAMIENTAS_DEBBUGING', default=False)
+ACTIVAR_HERRAMIENTAS_DEBBUGING = env.bool('ACTIVAR_HERRAMIENTAS_DEBBUGING', default=True)
 
 if ACTIVAR_HERRAMIENTAS_DEBBUGING:
     INSTALLED_APPS += (
@@ -153,3 +189,6 @@ if ACTIVAR_HERRAMIENTAS_DEBBUGING:
     )
 
     MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+
+RECAPTCHA_PUBLIC_KEY = env.str(var='RECAPTCHA_PUBLIC_KEY', default="")
+RECAPTCHA_PRIVATE_KEY = env.str(var='RECAPTCHA_PRIVATE_KEY', default="")
