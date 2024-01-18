@@ -1,4 +1,5 @@
 import sys
+import os
 
 import environ
 
@@ -30,9 +31,15 @@ SECRET_KEY = env('DJANGO_SECRET_KEY', default='CHANGEME!!!')        # noqa
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default='*')       # noqa
 
 DATABASES = {
-    'default': env.db('DATABASE_URL')
+    "default": {
+        "ENGINE": os.environ.get('DB_ENGINE'),
+        "NAME": os.environ.get('DB_NAME'),
+        "USER": os.environ.get('DB_USER'),
+        "PASSWORD": os.environ.get('DB_PASSWORD'),
+        "HOST": os.environ.get('DB_HOST'),
+        "PORT": os.environ.get('DB_PORT'),
+        }
 }
-
 
 DJANGO_APPS = (
     'django.contrib.admin',
@@ -45,6 +52,7 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'rest_framework',
+    'rest_framework_json_api',
     'django_filters',
     'corsheaders',
     'django_recaptcha',
@@ -84,7 +92,7 @@ AUTH_USER_MODEL = 'usuario.Usuario'
 WSGI_APPLICATION = 'project.wsgi.application'
 
 LANGUAGE_CODE = 'es-ar'
-TIME_ZONE = 'UTC'
+TIME_ZONE = env.str('DJANGO_TIME_ZONE', default='America/Argentina/Catamarca')
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -152,6 +160,11 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
     ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
@@ -169,6 +182,7 @@ REST_FRAMEWORK = {
     'SEARCH_PARAM': 'filter[search]',
     'TEST_REQUEST_RENDERER_CLASSES': (
         'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework.renderers.MultiPartRenderer',
     ),
     'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
 }
