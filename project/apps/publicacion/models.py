@@ -15,7 +15,7 @@ class Fecha(models.Model):
     fechas_a_publicar = models.DateField()
 
     def __str__(self):
-        return f'fecha:{self.id}'
+        return f'fecha: {self.pk}'
 
 
 class Publicacion(models.Model):
@@ -50,4 +50,4 @@ class Publicacion(models.Model):
     archivo = models.FileField()
 
     def __str__(self):
-        return f'publicacion N°: {self.id}'
+        return f'publicacion N°: {self.pk}'

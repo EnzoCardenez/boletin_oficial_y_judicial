@@ -15,6 +15,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
                  'last_name',
                  'email',
                  'organismo',
+                 'es_boletin',
                  'permission',
                  )
 
@@ -23,8 +24,8 @@ class UsuarioSerializer(serializers.ModelSerializer):
     }
 
     @staticmethod
-    def get_user_permissions(obj):
-        return obj.user_permissions.all()
+    def get_user_permissions(instance):
+        return instance.user_permissions.all()
 
 
 class UsuarioDetalleSerializer(serializers.ModelSerializer):

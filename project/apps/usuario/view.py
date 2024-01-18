@@ -17,7 +17,7 @@ class CustomTokenView(TokenView):
             )
 
         url = 'https://www.google.com/recaptcha/api/siteverify'
-        data = {'secret': settings.SECRET_KEY_CAPTCHA, 'response': captcha_value}
+        data = {'secret': settings.RECAPTCHA_PUBLIC_KEY, 'response': captcha_value}
 
         try:
             response = requests.post(url=url, data=data)

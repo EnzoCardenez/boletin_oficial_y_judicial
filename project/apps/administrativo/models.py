@@ -45,4 +45,4 @@ class Comprobante(models.Model):
     publicacion = models.OneToOneField(Publicacion, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Comprobante numero: {self.id}'
+        return f'Comprobante id: {self.pk}'

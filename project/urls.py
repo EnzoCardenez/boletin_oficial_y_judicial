@@ -19,6 +19,8 @@ from django.conf import settings
 
 from .router import router
 
+from usuario.view import CustomTokenView
+
 # I added platform's name.
 admin.site.site_header = getattr(settings, 'PROJECT_NAME_HEADER')
 admin.site.site_title = getattr(settings, 'PROJECT_NAME_TITLE')
