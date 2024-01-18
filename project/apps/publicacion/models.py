@@ -26,7 +26,7 @@ class Publicacion(models.Model):
         verbose_name_plural = 'Publicaciones'
 
     uuid = models.UUIDField(primary_key=False, unique=True, default=uuid.uuid4, editable=False)
-    estado = models.CharField(choices=ESTADO, default='iniciado')
+    estado = models.CharField(max_length=23, choices=ESTADO, default='iniciado')
     cuerpo_publicacion = models.TextField(max_length=5500, blank=False, null=False)
     palabras = models.BigIntegerField(editable=False)
     dias_de_publicacion = models.IntegerField(blank=False, null=False)
