@@ -9,6 +9,7 @@ class Organismo(models.Model):
     cuit = models.PositiveIntegerField(blank=False, null=False)
     descripcion = models.TextField(max_length=600, blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'Organismo: {self.nombre}'

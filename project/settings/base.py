@@ -55,7 +55,6 @@ THIRD_PARTY_APPS = (
     'rest_framework_json_api',
     'django_filters',
     'corsheaders',
-    'django_recaptcha',
     'oauth2_provider',
 )
 
