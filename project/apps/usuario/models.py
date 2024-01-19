@@ -12,7 +12,7 @@ class Usuario(AbstractUser):
         db_table = "auth_user"
 
     organismo = models.ForeignKey(Organismo, on_delete=models.SET_NULL, blank=True, null=True)
-    es_boletin = models.BooleanField(default=False, blank=False, null=False)
+    es_boletin = models.BooleanField(default=False)
 
     def __str__(self):
         return f'usuario: {self.username}'

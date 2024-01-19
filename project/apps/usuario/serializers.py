@@ -1,22 +1,23 @@
 from rest_framework_json_api import serializers
 
+
 from .models import Usuario
 from organismo.serializers import OrganismoSerializer
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    user_permmisions = serializers.SerializerMethodField()
+
+    user_permissions = serializers.SerializerMethodField()
 
     class Meta:
         model = Usuario
-        field = (
-                 'username',
+        fields = (
                  'first_name',
                  'last_name',
                  'email',
                  'organismo',
                  'es_boletin',
-                 'permission',
+                 'user_permissions',
                  )
 
     included_serializer = {
@@ -25,14 +26,14 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_user_permissions(instance):
-        return instance.user_permissions.all()
+        return instance.get_all_permissions()
 
 
 class UsuarioDetalleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Usuario
-        field = (
+        fields = (
             'username',
             'first_name',
             'last_name',

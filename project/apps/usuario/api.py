@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Usuario
 from .serializers import UsuarioSerializer, UsuarioDetalleSerializer
+from .filters import UsuarioFilter
 from core.permission import CustomModelPermissions
 # Create your views here.
 
@@ -12,6 +13,9 @@ class UsuarioViewset(viewsets.ReadOnlyModelViewSet):
     serializer_class = UsuarioSerializer
     lookup_field = 'id'
     permission_classes = (IsAuthenticated,)
+    filter_class = UsuarioFilter
+    ordering_fields = ('first_name', 'last_name')
+    ordering = ('id', )
 
     def get_serializer_class(self):
         if self.action == 'list':
