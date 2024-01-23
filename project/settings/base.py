@@ -91,14 +91,13 @@ AUTH_USER_MODEL = 'usuario.Usuario'
 WSGI_APPLICATION = 'project.wsgi.application'
 
 LANGUAGE_CODE = 'es-ar'
-TIME_ZONE = env.str('DJANGO_TIME_ZONE', default='America/Argentina/Catamarca')
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = [
     ('es', _('Español')),
-    ('en', _('English')),
 ]
 
 # Static files (CSS, JavaScript, Images)
@@ -106,9 +105,11 @@ LANGUAGES = [
 
 STATIC_ROOT = str(PROJECT_DIR.path('static'))
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [str(PROJECT_DIR.path('assets')), ]
 
 MEDIA_ROOT = str(PROJECT_DIR.path('media'))
 MEDIA_URL = env.str('MEDIA_URL', default='/media/')
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
