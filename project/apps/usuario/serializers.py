@@ -20,7 +20,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
                  'user_permissions',
                  )
 
-    included_serializer = {
+    included_serializers = {
         'organismo': OrganismoSerializer,
     }
 

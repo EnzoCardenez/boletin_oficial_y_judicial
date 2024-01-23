@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
 from usuario.models import Usuario
 from .constant import ESTADO
@@ -47,7 +48,7 @@ class Publicacion(models.Model):
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_modificacion = models.DateField(auto_now=True)
     fecha_publicacion = models.ForeignKey(Fecha, on_delete=models.CASCADE)
-    archivo = models.FileField()
+    archivo = models.FileField(validators=[FileExtensionValidator(allowed_extensions='pdf')])
 
     def __str__(self):
         return f'publicacion N°: {self.pk}'
