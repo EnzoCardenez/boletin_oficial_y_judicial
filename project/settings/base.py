@@ -1,8 +1,9 @@
 import sys
+import os
 
 import environ
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 ROOT_DIR = environ.Path(__file__) - 3
@@ -30,9 +31,15 @@ SECRET_KEY = env('DJANGO_SECRET_KEY', default='CHANGEME!!!')        # noqa
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default='*')       # noqa
 
 DATABASES = {
-    'default': env.db('DATABASE_URL')
+    "default": {
+        "ENGINE": os.environ.get('DB_ENGINE'),
+        "NAME": os.environ.get('DB_NAME'),
+        "USER": os.environ.get('DB_USER'),
+        "PASSWORD": os.environ.get('DB_PASSWORD'),
+        "HOST": os.environ.get('DB_HOST'),
+        "PORT": os.environ.get('DB_PORT'),
+        }
 }
-
 
 DJANGO_APPS = (
     'django.contrib.admin',
@@ -45,20 +52,23 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'rest_framework',
+    'rest_framework_json_api',
     'django_filters',
     'corsheaders',
+    'oauth2_provider',
 )
 
 PROJECT_APPS = (
     'core',
     'administrativo',
-    'organismos',
+    'organismo',
     'persona',
     'publicacion',
     'usuario',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
+
 
 MIDDLEWARE = (
     'corsheaders.middleware.CorsMiddleware',
@@ -69,16 +79,19 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
 
 )
 
 ROOT_URLCONF = 'project.urls'
 
+AUTH_USER_MODEL = 'usuario.Usuario'
+
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'project.wsgi.application'
 
 LANGUAGE_CODE = 'es-ar'
-TIME_ZONE = 'UTC'
+TIME_ZONE = env.str('DJANGO_TIME_ZONE', default='America/Argentina/Catamarca')
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -136,13 +149,51 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 50,
+    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_json_api.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework_json_api.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_json_api.filters.QueryParameterValidationFilter',
+        'rest_framework_json_api.filters.OrderingFilter',
+        'rest_framework_json_api.django_filters.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ),
+    'SEARCH_PARAM': 'filter[search]',
+    'TEST_REQUEST_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework.renderers.MultiPartRenderer',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
+}
+
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    'oauth2_provider.backends.OAuth2Backend',
 )
 
 
-ACTIVAR_HERRAMIENTAS_DEBBUGING = env.bool('ACTIVAR_HERRAMIENTAS_DEBBUGING', default=False)
+ACTIVAR_HERRAMIENTAS_DEBBUGING = env.bool('ACTIVAR_HERRAMIENTAS_DEBBUGING', default=True)
 
 if ACTIVAR_HERRAMIENTAS_DEBBUGING:
     INSTALLED_APPS += (
@@ -151,3 +202,6 @@ if ACTIVAR_HERRAMIENTAS_DEBBUGING:
     )
 
     MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+
+RECAPTCHA_PUBLIC_KEY = env.str(var='RECAPTCHA_PUBLIC_KEY', default="")
+RECAPTCHA_PRIVATE_KEY = env.str(var='RECAPTCHA_PRIVATE_KEY', default="")

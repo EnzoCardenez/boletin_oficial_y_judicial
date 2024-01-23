@@ -19,6 +19,8 @@ from django.conf import settings
 
 from .router import router
 
+from usuario.view import CustomTokenView
+
 # I added platform's name.
 admin.site.site_header = getattr(settings, 'PROJECT_NAME_HEADER')
 admin.site.site_title = getattr(settings, 'PROJECT_NAME_TITLE')
@@ -26,4 +28,6 @@ admin.site.site_title = getattr(settings, 'PROJECT_NAME_TITLE')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
+    path('oauth2/token/', CustomTokenView.as_view(), name="token"),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]
