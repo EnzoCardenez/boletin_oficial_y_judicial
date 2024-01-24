@@ -32,7 +32,9 @@ class Publicacion(models.Model):
     palabras = models.BigIntegerField(editable=False)
     dias_de_publicacion = models.IntegerField(blank=False, null=False)
     sellos = models.IntegerField(blank=False, null=False)
-    cuil = models.IntegerField(blank=False, null=False)
+    copias_requeridas = models.BooleanField(blank=False, null=False, default=False)
+    cantidad_de_copias = models.IntegerField(editable=False)
+    cuil = models.IntegerField(blank=True, null=True)
     creado_por = models.ForeignKey(
                                     Usuario,
                                     on_delete=models.CASCADE,
@@ -47,8 +49,8 @@ class Publicacion(models.Model):
                                         )
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_modificacion = models.DateField(auto_now=True)
-    fecha_publicacion = models.ForeignKey(Fecha, on_delete=models.CASCADE)
-    archivo = models.FileField(validators=[FileExtensionValidator(allowed_extensions='pdf')])
+    fecha_publicacion = models.ForeignKey(Fecha, on_delete=models.CASCADE, blank=True, null=True)
+    archivo = models.FileField(validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 
     def __str__(self):
         return f'publicacion N°: {self.pk}'
