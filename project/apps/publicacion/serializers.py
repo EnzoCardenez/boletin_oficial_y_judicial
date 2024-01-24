@@ -24,6 +24,7 @@ class PublicacionSerializer(serializers.ModelSerializer):
             'palabras',
             'dias_de_publicacion',
             'sellos',
+            'copias_requeridas',
             'cantidad_de_copias',
             'cuil',
             'archivo',
@@ -59,7 +60,7 @@ class PublicacionSerializer(serializers.ModelSerializer):
             'copias_requeridas': validated_data['copias_requeridas'],
             'cantidad_de_copias': copias(
                 validated_data.get('dias_de_publicacion', ''),
-                validated_data.get('copias_requeridas', False)
+                validated_data.get('copias_requeridas', '')
                                          ),
             'creado_por': validated_data['creado_por'],
             'modificado_por': validated_data['modificado_por'],
