@@ -9,7 +9,7 @@ class FechaFactory(django.DjangoModelFactory):
     class Meta:
         model = Fecha
 
-        fecha_a_publicar = factory.Factory(provider='random_digit')
+    fecha_a_publicar = factory.Faker(provider='random_digit')
 
 
 class PublicacionFactory(django.DjangoModelFactory):
