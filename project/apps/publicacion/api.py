@@ -14,7 +14,7 @@ class PublicacionViewset(
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Publicacion.objects.all()
+    queryset = Publicacion.objects.all().select_related('creado_por', 'modificado_por')
     serializer_class = PublicacionSerializer
     permission_classes = [IsAuthenticated,]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]

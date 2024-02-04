@@ -18,8 +18,6 @@ class PublicacionFactory(django.DjangoModelFactory):
         model = Publicacion
 
     cuerpo_publicacion = faker.Faker(provider='sentence', nb_words=16)
-    palabras = 0
-    sellos = 1
     dias_de_publicacion = faker.Faker(provider='random_digit')
     cantidad_de_copias = 0
     creado_por = SubFactory(UsuarioFactory)

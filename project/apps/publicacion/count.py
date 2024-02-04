@@ -8,8 +8,6 @@ def palabra(data):
     return len_texto
 
 
-def copias(*args):
-
-    dias_de_publicacion, copias_requeridas, *_ = args
+def copias(dias_de_publicacion, copias_requeridas):
 
     return dias_de_publicacion if copias_requeridas else 0
